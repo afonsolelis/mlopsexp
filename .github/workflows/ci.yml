@@ -17,16 +17,17 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.12'  # Defina a versão do Python aqui
+        python-version: '3.12'  # Define a versão do Python aqui
 
-    - name: Install dependencies
+    - name: Install Poetry
       run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install --upgrade pip
-        pip install -r requirements.txt
+        curl -sSL https://install.python-poetry.org | python3 -  # Instala Poetry
+        export PATH="$HOME/.local/bin:$PATH"  # Adiciona Poetry ao PATH
 
-    - name: Run tests
+    - name: Install dependencies with Poetry
       run: |
-        source venv/bin/activate
-        pytest --maxfail=1 --disable-warnings  # Executa os testes com pytest
+        poetry install  # Instala as dependências listadas no pyproject.toml
+
+    - name: Run tests with Poetry
+      run: |
+        poetry run pytest --maxfail=1 --disable-warnings  # Executa os testes com pytest
